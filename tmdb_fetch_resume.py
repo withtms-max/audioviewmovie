@@ -38,7 +38,7 @@ ws.title = "Movie Data Part 2"
 
 headers = [
     "포스터 이미지", "영화 제목", "장르", "제작국가", "감독", 
-    "러닝타임", "개봉일", "등급", "줄거리", "검색 키워드", "포스터 URL"
+    "러닝타임", "개봉일", "등급", "줄거리", "검색 키워드", "포스터 URL", "OTT 플랫폼"
 ]
 ws.append(headers)
 
@@ -53,6 +53,7 @@ ws.column_dimensions['H'].width = 10
 ws.column_dimensions['I'].width = 50
 ws.column_dimensions['J'].width = 30
 ws.column_dimensions['K'].width = 30
+ws.column_dimensions['L'].width = 25
 
 def get_movie_data(title):
     search_url = "https://api.themoviedb.org/3/search/movie"
@@ -75,7 +76,7 @@ def get_movie_data(title):
         
         movie_id = results[0]['id']
         
-        details_url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={TMDB_API_KEY}&language=ko-KR&append_to_response=credits,release_dates,keywords"
+        details_url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={TMDB_API_KEY}&language=ko-KR&append_to_response=credits,release_dates,keywords,watch/providers"
         detail_res = requests.get(details_url, timeout=10)
         detail_res.raise_for_status()
         data = detail_res.json()
@@ -120,6 +121,14 @@ def get_movie_data(title):
         poster_path = data.get('poster_path')
         poster_url = f"https://image.tmdb.org/t/p/w500{poster_path}" if poster_path else ""
         
+        # Get OTT Providers
+        ott_str = ""
+        providers = data.get('watch/providers', {}).get('results', {}).get('KR', {})
+        flatrate = providers.get('flatrate', [])
+        if flatrate:
+            ott_list = [p.get('provider_name') for p in flatrate]
+            ott_str = ", ".join(ott_list)
+        
         return {
             "title": data.get('title', title),
             "genres": genres,
@@ -130,7 +139,8 @@ def get_movie_data(title):
             "rating": rating,
             "plot": plot,
             "keywords": keywords,
-            "poster_url": poster_url
+            "poster_url": poster_url,
+            "ott": ott_str
         }
     except Exception as e:
         print(f"Error fetching {title}: {e}", flush=True)
@@ -153,6 +163,7 @@ for i, title in enumerate(titles_to_process, 1):
         ws.cell(row=row_idx, column=9, value=data['plot'])
         ws.cell(row=row_idx, column=10, value=data['keywords'])
         ws.cell(row=row_idx, column=11, value=data['poster_url'])
+        ws.cell(row=row_idx, column=12, value=data['ott'])
         
         if data['poster_url']:
             try:

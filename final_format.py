@@ -44,6 +44,7 @@ def enrich_row(row):
             row['줄거리'] = m_row.iloc[7]
             row['검색 키워드'] = m_row.iloc[8]
             row['포스터 URL'] = m_row.iloc[9]
+            row['OTT 플랫폼'] = m_row.iloc[10] if len(m_row) > 10 else ""
             row['has_info'] = True # Now it has manual info
             return row
             
@@ -132,6 +133,7 @@ for idx, row_data in df_sorted.iterrows():
     ws_template.cell(row=row_num, column=8, value=row_data.get('줄거리', ''))
     ws_template.cell(row=row_num, column=9, value=final_keywords)
     ws_template.cell(row=row_num, column=10, value=row_data.get('포스터 URL', ''))
+    ws_template.cell(row=row_num, column=12, value=row_data.get('OTT 플랫폼', ''))
     
     # Image
     poster_url = str(row_data.get('포스터 URL', ''))
@@ -152,6 +154,7 @@ for idx, row_data in df_sorted.iterrows():
 ws_template.column_dimensions['A'].width = 25
 ws_template.column_dimensions['I'].width = 60
 ws_template.column_dimensions['K'].width = 16
+ws_template.column_dimensions['L'].width = 25
 
 FINAL_OUTPUT = f"영화정보_입력양식_통합본_{int(time.time())}.xlsx"
 wb_template.save(FINAL_OUTPUT)

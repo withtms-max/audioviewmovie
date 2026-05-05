@@ -44,12 +44,12 @@ ws_final.title = "Movie Data"
 
 headers = [
     "포스터 이미지", "영화 제목", "장르", "제작국가", "감독", 
-    "러닝타임", "개봉일", "등급", "줄거리", "검색 키워드", "포스터 URL"
+    "러닝타임", "개봉일", "등급", "줄거리", "검색 키워드", "포스터 URL", "OTT 플랫폼"
 ]
 ws_final.append(headers)
 
 # Set widths
-col_widths = [16, 25, 20, 15, 15, 10, 12, 10, 50, 30, 30]
+col_widths = [16, 25, 20, 15, 15, 10, 12, 10, 50, 30, 30, 25]
 for i, width in enumerate(col_widths, 1):
     ws_final.column_dimensions[chr(64+i)].width = width
 

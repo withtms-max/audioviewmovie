@@ -45,6 +45,7 @@ for idx, row in df.iterrows():
     plot = str(row.iloc[7]) if pd.notna(row.iloc[7]) else ""
     keywords = str(row.iloc[8]) if pd.notna(row.iloc[8]) else ""
     poster_url = str(row.iloc[9]) if pd.notna(row.iloc[9]) else ""
+    ott_platform = str(row.iloc[10]) if len(row) > 10 and pd.notna(row.iloc[10]) else ""
 
     print(f"[{idx+1}/{len(df)}] '{title}' 양식 변환 중...")
 
@@ -59,6 +60,7 @@ for idx, row in df.iterrows():
     ws_template.cell(row=row_num, column=8, value=plot)
     ws_template.cell(row=row_num, column=9, value=keywords)
     ws_template.cell(row=row_num, column=10, value=poster_url)
+    ws_template.cell(row=row_num, column=12, value=ott_platform)
 
     # Image (Optional: try to embed if URL exists)
     if poster_url.startswith("http"):
@@ -80,6 +82,7 @@ for idx, row in df.iterrows():
 ws_template.column_dimensions['A'].width = 25
 ws_template.column_dimensions['I'].width = 50
 ws_template.column_dimensions['K'].width = 16
+ws_template.column_dimensions['L'].width = 25
 
 # Save
 wb_template.save(OUTPUT_FILE)
