@@ -1,0 +1,15 @@
+# 엑셀 결과물 무시
+결과물/
+*.xlsx
+*.jpg
+
+# 파이썬 캐시
+__pycache__/
+*.py[cod]
+
+# 사용자 파일
+영화목록.txt
+movie_list.txt
+
+# Mac 시스템 파일
+.DS_Store
